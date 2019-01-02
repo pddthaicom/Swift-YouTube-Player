@@ -81,6 +81,10 @@ public func videoIDFromYouTubeURL(_ videoURL: URL) -> String? {
     return videoURL.queryStringComponents()["v"] as? String
 }
 
+public func playlistIDFromYouTubeURL(_ videoURL: URL) -> String? {
+    return videoURL.queryStringComponents()["list"] as? String
+}
+
 /** Embed and control YouTube videos */
 open class YouTubePlayerView: UIView, UIWebViewDelegate {
     
@@ -163,6 +167,19 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
         loadWebViewWithParameters(playerParameters())
     }
     
+    open func loadPlaylistURL(_ playlistURL: URL) {
+        if let videoID = videoIDFromYouTubeURL(playlistURL), let playlistID = playlistIDFromYouTubeURL(playlistURL) {
+            var playerParams = playerParameters()
+            playerParams["videoId"] = videoID as AnyObject?
+
+            playerVars["listType"] = "playlist" as AnyObject?
+            playerVars["list"] = playlistID as AnyObject?
+            playerVars["loop"] = 1 as AnyObject?
+
+            loadWebViewWithParameters(playerParams)
+        }
+    }
+
     
     // MARK: Player controls
     
