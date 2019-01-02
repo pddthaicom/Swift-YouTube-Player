@@ -229,11 +229,21 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
         evaluatePlayerCommand("nextVideo()")
     }
     
+    // MARK: Retrieving playlist information
+
+    open func getPlaylist() -> String? {
+        return evaluatePlayerCommand("getPlaylist()")
+    }
+
+    open func getPlaylistIndex() -> String? {
+        return evaluatePlayerCommand("getPlaylistIndex()")
+    }
+
     @discardableResult fileprivate func evaluatePlayerCommand(_ command: String) -> String? {
         let fullCommand = "player." + command + ";"
         return webView.stringByEvaluatingJavaScript(from: fullCommand)
     }
-    
+
     
     // MARK: Player setup
     
