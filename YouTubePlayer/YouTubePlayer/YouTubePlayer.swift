@@ -168,15 +168,22 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
     }
     
     open func loadPlaylistURL(_ playlistURL: URL) {
-        if let videoID = videoIDFromYouTubeURL(playlistURL), let playlistID = playlistIDFromYouTubeURL(playlistURL) {
-            playerVars["listType"] = "playlist" as AnyObject?
-            playerVars["list"] = playlistID as AnyObject?
-            playerVars["loop"] = 1 as AnyObject?
-
-            var playerParams = playerParameters()
-            playerParams["videoId"] = videoID as AnyObject?
-
-            loadWebViewWithParameters(playerParams)
+        if let videoID = videoIDFromYouTubeURL(playlistURL) {
+            
+            if let playlistID = playlistIDFromYouTubeURL(playlistURL) {
+                playerVars["listType"] = "playlist" as AnyObject?
+                playerVars["list"] = playlistID as AnyObject?
+                playerVars["loop"] = 1 as AnyObject?
+                
+                var playerParams = playerParameters()
+                playerParams["videoId"] = videoID as AnyObject?
+                
+                loadWebViewWithParameters(playerParams)
+            }
+            else {
+                loadVideoURL(playlistURL)
+            }
+            
         }
     }
 
