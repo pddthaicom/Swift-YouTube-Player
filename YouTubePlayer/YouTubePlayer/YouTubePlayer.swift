@@ -218,6 +218,7 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
     
     open func stop() {
         evaluatePlayerCommand("stopVideo()")
+        playerState = .Unstarted
     }
     
     open func clear() {
