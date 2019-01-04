@@ -171,6 +171,16 @@ open class YouTubePlayerView: UIView, UIWebViewDelegate {
         if let videoID = videoIDFromYouTubeURL(playlistURL) {
             
             if let playlistID = playlistIDFromYouTubeURL(playlistURL) {
+                
+                playerVars["controls"] = 1 as AnyObject?
+                playerVars["playsinline"] = 1 as AnyObject?
+                playerVars["autoplay"] = 1 as AnyObject?
+                playerVars["autohide"] = 1 as AnyObject?
+                playerVars["showinfo"] = 0 as AnyObject?
+                playerVars["modestbranding"] = 0 as AnyObject?
+                playerVars["fs"] = 0 as AnyObject?
+                playerVars["rel"] = 0 as AnyObject?
+
                 playerVars["listType"] = "playlist" as AnyObject?
                 playerVars["list"] = playlistID as AnyObject?
                 playerVars["loop"] = 1 as AnyObject?
