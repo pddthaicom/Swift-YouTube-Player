@@ -5,11 +5,13 @@
 //  Created by Giles Van Gruisen on 1/31/15.
 //  Copyright (c) 2015 Giles Van Gruisen. All rights reserved.
 //
+//  Last Update: 2020/04/17
+//
 
 import UIKit
 import YouTubePlayer
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, YouTubePlayerDelegate {
 
     @IBOutlet var playerView: YouTubePlayerView!
     @IBOutlet var playButton: UIButton!
@@ -18,7 +20,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
+        playerView.delegate = self
     }
 
     @IBAction func play(sender: UIButton) {
@@ -47,21 +51,25 @@ class ViewController: UIViewController {
             "controls": "0",
             "showinfo": "0"
             ] as YouTubePlayerView.YouTubePlayerParameters
-        playerView.loadVideoID("wQg3bXrVLtg")
+        playerView.loadVideoID("YnwrJFvReac")
     }
 
     @IBAction func loadPlaylist(sender: UIButton) {
-        playerView.loadPlaylistID("RDe-ORhEE9VVg")
+        playerView.loadPlaylistID("PLa9lDny5Nkudcs3XS-IofaeMxLfGjCowZ")
     }
     
     @IBAction func currentTime(sender: UIButton) {
-        let title = String(format: "Current Time %@", playerView.getCurrentTime() ?? "0")
-        currentTimeButton.setTitle(title, for: .normal)
+        playerView.getCurrentTime() { result in
+            let title = "Current Time: \(result ?? 0.0)"
+            self.currentTimeButton.setTitle(title, for: .normal)
+        }
     }
     
     @IBAction func duration(sender: UIButton) {
-        let title = String(format: "Duration %@", playerView.getDuration() ?? "0")
-        durationButton.setTitle(title, for: .normal)
+        playerView.getDuration() { result in
+            let title = "Duration: \(result ?? 0.0)"
+            self.durationButton.setTitle(title, for: .normal)
+        }
     }
 
     func showAlert(message: String) {
@@ -80,6 +88,23 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-
+    
+    // MARK: YouTubePlayerDelegate
+    
+    func playerReady(_ videoPlayer: YouTubePlayerView) {
+        playButton.setTitle("Play", for: .normal)
+    }
+    
+    func playerStateChanged(_ videoPlayer: YouTubePlayerView, playerState: YouTubePlayerState) {
+        if playerState == YouTubePlayerState.Playing {
+            playButton.setTitle("Pause", for: .normal)
+        } else if (playerState == YouTubePlayerState.Paused) || (playerState == YouTubePlayerState.Ended) {
+            playButton.setTitle("Play", for: .normal)
+        }
+    }
+    
+    func playerQualityChanged(_ videoPlayer: YouTubePlayerView, playbackQuality: YouTubePlaybackQuality) {
+        
+    }
+    
 }
-

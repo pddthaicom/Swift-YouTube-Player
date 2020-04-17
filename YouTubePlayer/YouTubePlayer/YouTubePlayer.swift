@@ -5,7 +5,7 @@
 //  Created by Giles Van Gruisen on 12/21/14.
 //  Copyright (c) 2014 Giles Van Gruisen. All rights reserved.
 //
-//  Last Update: 2019/04/10
+//  Last Update: 2020/04/17
 //
 
 import UIKit
@@ -407,16 +407,18 @@ open class YouTubePlayerView: UIView, WKNavigationDelegate {
     }
     
     
-    // MARK: UIWebViewDelegate
-    
-    open func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
+    // MARK: WKNavigationDelegate
+
+    open func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: ((WKNavigationActionPolicy) -> Void)) {
+        debugPrint("WKWebView: decidePolicyFor: ", navigationAction.request.url ?? "")
         
-        let url = request.url
+        if let url = navigationAction.request.url, url.scheme == "ytplayer" {
+            handleJSEvent(url)
+            decisionHandler(.cancel)
+            return
+        }
         
-        // Check if ytplayer event and, if so, pass to handleJSEvent
-        if let url = url, url.scheme == "ytplayer" { handleJSEvent(url) }
-        
-        return true
+        decisionHandler(.allow)
     }
 }
 
